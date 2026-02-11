@@ -1,6 +1,6 @@
 ---
 title: 'Sample Paper Review: Guardrails in Practice'
-date: 2026-02-10
+date: '2026-02-10'
 paper_authors: ['Author One', 'Author Two']
 year: 2025
 venue: 'arXiv'

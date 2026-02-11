@@ -1,6 +1,6 @@
 ---
 title: 'Sample Eval Harness'
-date: 2026-02-10
+date: '2026-02-10'
 repo: 'https://github.com/example/eval-harness'
 status: 'alpha'
 topics: ['eval-harnesses', 'agent-security']

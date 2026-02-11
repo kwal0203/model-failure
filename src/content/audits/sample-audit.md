@@ -1,6 +1,6 @@
 ---
 title: 'Sample Retrieval Guardrail Audit'
-date: 2026-02-10
+date: '2026-02-10'
 target_name: 'Example RAG Service'
 target_link: 'https://example.com'
 target_version: 'v0.1.0'
