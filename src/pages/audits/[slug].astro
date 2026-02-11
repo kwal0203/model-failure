@@ -13,10 +13,12 @@ const s = entry.data.severity_summary;
 ---
 
 <BaseLayout title={`${entry.data.title} | Audits`} description={entry.data.scope}>
-  <article>
+  <article class="prose">
     <h1>{entry.data.title}</h1>
     <p class="meta">{entry.data.date} • {entry.data.target_name}</p>
-    <p class="meta">Topics: {entry.data.topics.join(', ')}</p>
+    <div class="tag-row">
+      {entry.data.topics.map((topic) => <span class="tag">{topic}</span>)}
+    </div>
     <p>
       Target: <a href={entry.data.target_link}>{entry.data.target_name}</a> ({
         entry.data.target_version

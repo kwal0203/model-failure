@@ -15,13 +15,15 @@ const { Content } = await entry.render();
   title={`${entry.data.title} | Paper Reviews`}
   description={`${entry.data.venue} (${entry.data.year})`}
 >
-  <article>
+  <article class="prose">
     <h1>{entry.data.title}</h1>
     <p class="meta">{entry.data.paper_authors.join(', ')}</p>
     <p class="meta">
       {entry.data.date} • {entry.data.venue} • Reproduced: {entry.data.reproduced ? 'yes' : 'no'}
     </p>
-    <p class="meta">Topics: {entry.data.topics.join(', ')}</p>
+    <div class="tag-row">
+      {entry.data.topics.map((topic) => <span class="tag">{topic}</span>)}
+    </div>
     <p>
       Links:
       {
