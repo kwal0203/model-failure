@@ -1,6 +1,6 @@
 ---
 title: 'Welcome to Model Failure'
-date: 2026-02-10
+date: '2026-02-10'
 description: 'Purpose and publishing model for this site.'
 topics: ['agent-security', 'methodology']
 ---

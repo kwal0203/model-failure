@@ -1,10 +1,14 @@
 import { defineCollection, z } from 'astro:content';
 
+const dateField = z
+  .union([z.string(), z.date()])
+  .transform((value) => (value instanceof Date ? value.toISOString().slice(0, 10) : value));
+
 const writings = defineCollection({
   type: 'content',
   schema: z.object({
     title: z.string(),
-    date: z.string(),
+    date: dateField,
     description: z.string(),
     topics: z.array(z.string()),
     draft: z.boolean().optional(),
@@ -15,7 +19,7 @@ const audits = defineCollection({
   type: 'content',
   schema: z.object({
     title: z.string(),
-    date: z.string(),
+    date: dateField,
     target_name: z.string(),
     target_link: z.string().url(),
     target_version: z.string(),
@@ -40,7 +44,7 @@ const tools = defineCollection({
   type: 'content',
   schema: z.object({
     title: z.string(),
-    date: z.string(),
+    date: dateField,
     repo: z.string().url(),
     status: z.enum(['alpha', 'beta', 'stable']),
     topics: z.array(z.string()),
@@ -72,7 +76,7 @@ const paperReviews = defineCollection({
   type: 'content',
   schema: z.object({
     title: z.string(),
-    date: z.string(),
+    date: dateField,
     paper_authors: z.array(z.string()),
     year: z.number().int(),
     venue: z.string(),
