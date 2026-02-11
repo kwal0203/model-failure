@@ -1,0 +1,23 @@
+#!/usr/bin/env sh
+set -eu
+
+staged_files="$(git diff --cached --name-only --diff-filter=ACMR)"
+
+if [ -z "$staged_files" ]; then
+	exit 0
+fi
+
+prettier_files="$(printf "%s\n" "$staged_files" | rg -N '\.(md|mdx|json|ya?ml|css|scss|html)$' || true)"
+biome_files="$(printf "%s\n" "$staged_files" | rg -N '\.(js|jsx|ts|tsx|astro|json)$' || true)"
+
+if [ -n "$prettier_files" ]; then
+	echo "Formatting staged files with Prettier..."
+	printf "%s\n" "$prettier_files" | xargs npm exec -- prettier --write
+	printf "%s\n" "$prettier_files" | xargs git add
+fi
+
+if [ -n "$biome_files" ]; then
+	echo "Running Biome on staged files..."
+	printf "%s\n" "$biome_files" | xargs npm exec -- biome check --write
+	printf "%s\n" "$biome_files" | xargs git add
+fi

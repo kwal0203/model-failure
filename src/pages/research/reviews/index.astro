@@ -1,25 +1,32 @@
 ---
-import BaseLayout from '../../../layouts/BaseLayout.astro';
-import { getPaperReviews } from '../../../lib/content';
+import FormattedDate from "@/components/FormattedDate.astro";
+import { getPaperReviews, sortByDateDesc } from "@/data/modelfailure";
+import PageLayout from "@/layouts/Base.astro";
 
-const reviews = await getPaperReviews();
+const reviews = sortByDateDesc(await getPaperReviews());
 ---
 
-<BaseLayout
-  title="Paper Reviews | Model Failure"
-  description="Structured reviews of AI security papers."
+<PageLayout
+	meta={{
+		description: "Structured reviews of external papers, with security takeaways and repro notes.",
+		title: "Research Reviews",
+	}}
 >
-  <h1>Paper Reviews</h1>
-  <ul class="list">
-    {
-      reviews.map((entry) => (
-        <li class="item">
-          <a href={`/research/reviews/${entry.slug}/`}>{entry.data.title}</a>
-          <div class="meta">
-            {entry.data.date} • {entry.data.venue}
-          </div>
-        </li>
-      ))
-    }
-  </ul>
-</BaseLayout>
+	<h1 class="title mb-8">Paper Reviews</h1>
+	<ul class="space-y-6" role="list">
+		{reviews.map((entry) => (
+			<li class="rounded border border-gray-300 p-4 dark:border-gray-700">
+				<div class="mb-2 flex items-center justify-between gap-2">
+					<a class="cactus-link font-semibold" href={`/research/reviews/${entry.id}/`}>
+						{entry.data.title}
+					</a>
+					<FormattedDate class="text-sm text-gray-600 dark:text-gray-400" date={entry.data.date} />
+				</div>
+				<p class="mb-1 text-sm">{entry.data.paper_authors.join(", ")}</p>
+				<p class="text-sm">
+					{entry.data.venue} ({entry.data.year}) | Reproduced: {entry.data.reproduced ? "Yes" : "No"}
+				</p>
+			</li>
+		))}
+	</ul>
+</PageLayout>

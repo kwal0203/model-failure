@@ -1,43 +1,35 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getPaperReviews, getPublications } from '../../lib/content';
+import { getPaperReviews, getPublications } from "@/data/modelfailure";
+import PageLayout from "@/layouts/Base.astro";
 
 const [publications, reviews] = await Promise.all([getPublications(), getPaperReviews()]);
 ---
 
-<BaseLayout title="Research | Model Failure" description="Publications and paper reviews.">
-  <h1>Research</h1>
-  <p>
-    <a href="/research/publications/">Publications</a> and <a href="/research/reviews/"
-      >Paper Reviews</a
-    >.
-  </p>
-
-  <h2>Recent Publications</h2>
-  <ul class="list">
-    {
-      publications.slice(0, 5).map((entry) => (
-        <li class="item">
-          <a href={`/research/publications/${entry.slug}/`}>{entry.data.title}</a>
-          <div class="meta">
-            {entry.data.year} • {entry.data.venue}
-          </div>
-        </li>
-      ))
-    }
-  </ul>
-
-  <h2>Recent Reviews</h2>
-  <ul class="list">
-    {
-      reviews.slice(0, 5).map((entry) => (
-        <li class="item">
-          <a href={`/research/reviews/${entry.slug}/`}>{entry.data.title}</a>
-          <div class="meta">
-            {entry.data.date} • {entry.data.venue}
-          </div>
-        </li>
-      ))
-    }
-  </ul>
-</BaseLayout>
+<PageLayout
+	meta={{
+		description: "Publications and paper reviews focused on defensive AI security.",
+		title: "Research",
+	}}
+>
+	<h1 class="title mb-8">Research</h1>
+	<p class="mb-10">
+		This section contains my publications and independent reviews of external papers with a focus on
+		reproducibility and security relevance.
+	</p>
+	<div class="grid gap-6 sm:grid-cols-2">
+		<section class="rounded border border-gray-300 p-5 dark:border-gray-700">
+			<h2 class="title mb-2 text-xl">Publications</h2>
+			<p class="mb-3 text-sm">{publications.length} entries</p>
+			<a class="cactus-link font-semibold" href="/research/publications/">
+				View publications
+			</a>
+		</section>
+		<section class="rounded border border-gray-300 p-5 dark:border-gray-700">
+			<h2 class="title mb-2 text-xl">Paper Reviews</h2>
+			<p class="mb-3 text-sm">{reviews.length} entries</p>
+			<a class="cactus-link font-semibold" href="/research/reviews/">
+				View reviews
+			</a>
+		</section>
+	</div>
+</PageLayout>

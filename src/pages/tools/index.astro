@@ -1,23 +1,42 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getTools } from '../../lib/content';
+import { Icon } from "astro-icon/components";
+import FormattedDate from "@/components/FormattedDate.astro";
+import { getTools, sortByDateDesc } from "@/data/modelfailure";
+import PageLayout from "@/layouts/Base.astro";
 
-const tools = await getTools();
+const tools = sortByDateDesc(await getTools());
 ---
 
-<BaseLayout title="Tools | Model Failure" description="Red-teaming and evaluation tools.">
-  <h1>Tools</h1>
-  <ul class="list">
-    {
-      tools.map((entry) => (
-        <li class="item">
-          <a href={`/tools/${entry.slug}/`}>{entry.data.title}</a>
-          <div class="meta">
-            {entry.data.date} • {entry.data.status}
-          </div>
-          <p>{entry.data.description}</p>
-        </li>
-      ))
-    }
-  </ul>
-</BaseLayout>
+<PageLayout
+	meta={{
+		description: "Defensive red-team and evaluation tooling for AI systems.",
+		title: "Tools",
+	}}
+>
+	<div class="mb-10 flex items-center gap-3">
+		<h1 class="title">Tools</h1>
+		<a class="text-accent" href="/rss.xml" target="_blank">
+			<span class="sr-only">RSS feed</span>
+			<Icon aria-hidden="true" class="h-6 w-6" focusable="false" name="mdi:rss" />
+		</a>
+	</div>
+	<ul class="space-y-6" role="list">
+		{tools.map((entry) => (
+			<li class="rounded border border-gray-300 p-4 dark:border-gray-700">
+				<div class="mb-2 flex items-center justify-between gap-2">
+					<a class="cactus-link font-semibold" href={`/tools/${entry.id}/`}>
+						{entry.data.title}
+					</a>
+					<FormattedDate class="text-sm text-gray-600 dark:text-gray-400" date={entry.data.date} />
+				</div>
+				<p class="mb-2 text-sm">{entry.data.description}</p>
+				<p class="text-sm">
+					Status: <strong>{entry.data.status}</strong> |{" "}
+					<a class="cactus-link" href={entry.data.repo}>
+						Repository
+					</a>
+				</p>
+			</li>
+		))}
+	</ul>
+</PageLayout>

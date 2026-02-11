@@ -1,17 +1,25 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
+import PageLayout from "@/layouts/Base.astro";
 ---
 
-<BaseLayout
-  title="Scope & Safety | Model Failure"
-  description="Content scope and safety boundaries."
+<PageLayout
+	meta={{
+		description: "Scope and safety boundaries for published AI security content on Model Failure.",
+		title: "Scope and Safety",
+	}}
 >
-  <h1>Scope & Safety</h1>
-  <p>
-    In scope: defensive AI security content, safe proofs of concept, and mitigation-focused
-    analysis.
-  </p>
-  <p>
-    Out of scope: offensive abuse guides, exploit kits, and content that increases operational harm.
-  </p>
-</BaseLayout>
+	<h1 class="title mb-6">Scope and Safety</h1>
+	<div class="prose prose-sm max-w-none">
+		<p>
+			In scope: defensive AI security evaluations, reproducible failure analysis, mitigations, and safe
+			proof-of-concept demonstrations.
+		</p>
+		<p>
+			Out of scope: exploit packaging, persistence workflows, or operational details that enable misuse.
+		</p>
+		<p>
+			Each publication should include enough detail to validate findings while avoiding harm-enabling
+			instructions.
+		</p>
+	</div>
+</PageLayout>

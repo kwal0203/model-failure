@@ -1,32 +1,33 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
+import PageLayout from "@/layouts/Base.astro";
+
+const meta = {
+	description: "About Model Failure and current focus areas in defensive AI security engineering.",
+	title: "About",
+};
 ---
 
-<BaseLayout
-  title="About | Model Failure"
-  description="About Model Failure and current AI security work."
->
-  <h1>About</h1>
-  <p>
-    Model Failure is a public record of practical AI security work: failures, audits, and
-    mitigations.
-  </p>
-  <p>
-    Focus: adversarial testing, retrieval safety, agent behavior, and reproducible defensive
-    workflows.
-  </p>
-  <h2>What I Work On Now</h2>
-  <p>
-    I currently focus on evaluation harnesses, prompt-injection resilience, and practical security
-    review patterns for LLM systems.
-  </p>
-  <h2>Links</h2>
-  <ul>
-    <li>
-      GitHub: <a href="https://github.com/kwal0203">github.com/kwal0203</a>
-    </li>
-    <li>
-      Email: <a href="mailto:kane@modelfailure.com">kane@modelfailure.com</a>
-    </li>
-  </ul>
-</BaseLayout>
+<PageLayout meta={meta}>
+	<h1 class="title mb-8">About</h1>
+	<div class="prose prose-sm max-w-none">
+		<p>
+			Model Failure is a public research notebook focused on defensive AI security. I publish short
+			writings, structured audits, practical tools, and paper reviews with an emphasis on reproducibility.
+		</p>
+		<p>
+			Current focus: agent security evaluations, prompt-injection resilience, and evidence-first mitigation
+			testing.
+		</p>
+		<p>Contact and links:</p>
+		<ul>
+			<li>
+				GitHub:
+				<a class="cactus-link" href="https://github.com/kane">github.com/kane</a>
+			</li>
+			<li>
+				Email:
+				<a class="cactus-link" href="mailto:security@modelfailure.com">security@modelfailure.com</a>
+			</li>
+		</ul>
+	</div>
+</PageLayout>

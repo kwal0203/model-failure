@@ -144,22 +144,13 @@ Use a short-lived feature branch for every change.
    - `fix: correct rss feed ordering`
    - `docs: add audit template`
 
-5. Push changes to GitHub:
-   - `git push -u origin feature/<short-description>`
-
-6. Create a PR:
-   - `gh pr create --base main --head feature/<short-description> --fill`
-
-7. Merge the PR (prefer squash):
-   - `gh pr merge --squash --delete-branch`
-
-8. Checkout main:
+5. Checkout main:
    - `git checkout main`
 
-9. Pull main from GitHub:
-   - `git pull origin main`
+6. Merge feature branch with main:
+   - `git merge <branch>`
 
-10. Delete local feature branch:
+7. Delete local feature branch:
 
 - `git branch -d feature/<short-description>`
 - If needed: `git branch -D feature/<short-description>`
