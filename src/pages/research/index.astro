@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPaperReviews, getPublications } from '../../lib/content';
+
+const [publications, reviews] = await Promise.all([getPublications(), getPaperReviews()]);
+---
+
+<BaseLayout title="Research | Model Failure" description="Publications and paper reviews.">
+  <h1>Research</h1>
+  <p>
+    <a href="/research/publications/">Publications</a> and <a href="/research/reviews/"
+      >Paper Reviews</a
+    >.
+  </p>
+
+  <h2>Recent Publications</h2>
+  <ul class="list">
+    {
+      publications.slice(0, 5).map((entry) => (
+        <li class="item">
+          <a href={`/research/publications/${entry.slug}/`}>{entry.data.title}</a>
+          <div class="meta">
+            {entry.data.year} • {entry.data.venue}
+          </div>
+        </li>
+      ))
+    }
+  </ul>
+
+  <h2>Recent Reviews</h2>
+  <ul class="list">
+    {
+      reviews.slice(0, 5).map((entry) => (
+        <li class="item">
+          <a href={`/research/reviews/${entry.slug}/`}>{entry.data.title}</a>
+          <div class="meta">
+            {entry.data.date} • {entry.data.venue}
+          </div>
+        </li>
+      ))
+    }
+  </ul>
+</BaseLayout>

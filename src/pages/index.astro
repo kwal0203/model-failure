@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getLatestMixed } from '../lib/content';
+
+const latest = await getLatestMixed(6);
+---
+
+<BaseLayout
+  title="Model Failure | AI Security"
+  description="Fast, Markdown-first site for AI security writings, audits, tools, and research."
+>
+  <h1>Model Failure</h1>
+  <p>
+    AI security notes, audits, tools, and paper analysis focused on practical, defensive outcomes.
+  </p>
+
+  <h2>Latest</h2>
+  <ul class="list">
+    {
+      latest.map((item) => (
+        <li class="item">
+          <a href={item.href}>{item.title}</a>
+          <div class="meta">
+            {item.kind} • {item.date}
+          </div>
+        </li>
+      ))
+    }
+  </ul>
+</BaseLayout>

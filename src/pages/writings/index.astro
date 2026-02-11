@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getWritings } from '../../lib/content';
+
+const writings = await getWritings();
+---
+
+<BaseLayout
+  title="Writings | Model Failure"
+  description="Short posts, failure notes, and lessons learned."
+>
+  <h1>Writings</h1>
+  <ul class="list">
+    {
+      writings.map((entry) => (
+        <li class="item">
+          <a href={`/writings/${entry.slug}/`}>{entry.data.title}</a>
+          <div class="meta">
+            {entry.data.date} • {entry.data.topics.join(', ')}
+          </div>
+          <p>{entry.data.description}</p>
+        </li>
+      ))
+    }
+  </ul>
+</BaseLayout>

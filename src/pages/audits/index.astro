@@ -1,0 +1,22 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getAudits } from '../../lib/content';
+
+const audits = await getAudits();
+---
+
+<BaseLayout title="Audits | Model Failure" description="Structured AI security audit reports.">
+  <h1>Audits</h1>
+  <ul class="list">
+    {
+      audits.map((entry) => (
+        <li class="item">
+          <a href={`/audits/${entry.slug}/`}>{entry.data.title}</a>
+          <div class="meta">
+            {entry.data.date} • {entry.data.target_name} ({entry.data.target_version})
+          </div>
+        </li>
+      ))
+    }
+  </ul>
+</BaseLayout>

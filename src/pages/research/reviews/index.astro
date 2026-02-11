@@ -1,0 +1,25 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { getPaperReviews } from '../../../lib/content';
+
+const reviews = await getPaperReviews();
+---
+
+<BaseLayout
+  title="Paper Reviews | Model Failure"
+  description="Structured reviews of AI security papers."
+>
+  <h1>Paper Reviews</h1>
+  <ul class="list">
+    {
+      reviews.map((entry) => (
+        <li class="item">
+          <a href={`/research/reviews/${entry.slug}/`}>{entry.data.title}</a>
+          <div class="meta">
+            {entry.data.date} • {entry.data.venue}
+          </div>
+        </li>
+      ))
+    }
+  </ul>
+</BaseLayout>
