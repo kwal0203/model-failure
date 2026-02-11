@@ -1,11 +1,19 @@
 {
+  "type": "module",
+  "engines": {
+    "node": ">=18.20.8"
+  },
   "devDependencies": {
     "eslint": "^10.0.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
-    "prettier": "^3.8.1"
+    "prettier": "^3.8.1",
+    "prettier-plugin-astro": "^0.14.1"
   },
   "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "preview": "astro preview",
     "prepare": "husky",
     "format": "prettier . --write",
     "lint": "eslint .",
@@ -13,12 +21,19 @@
     "build": "astro build"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx,astro}": [
+    "*.{js,jsx,ts,tsx,mjs,cjs}": [
       "eslint --fix",
       "prettier --write"
     ],
-    "*.{md,mdx,json,yml,yaml,css,scss,txt}": [
+    "*.{astro,md,mdx,json,yml,yaml,css,scss,txt}": [
       "prettier --write"
     ]
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^4.3.13",
+    "@astrojs/sitemap": "^3.7.0",
+    "astro": "^5.17.1",
+    "typescript": "^5.9.3",
+    "zod": "^3.25.76"
   }
 }
