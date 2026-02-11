@@ -15,6 +15,7 @@ const { Content } = await entry.render();
   <article>
     <h1>{entry.data.title}</h1>
     <p class="meta">{entry.data.date} • {entry.data.status}</p>
+    <p class="meta">Topics: {entry.data.topics.join(', ')}</p>
     <p>
       Repo: <a href={entry.data.repo}>{entry.data.repo}</a>
     </p>

@@ -16,6 +16,7 @@ const s = entry.data.severity_summary;
   <article>
     <h1>{entry.data.title}</h1>
     <p class="meta">{entry.data.date} • {entry.data.target_name}</p>
+    <p class="meta">Topics: {entry.data.topics.join(', ')}</p>
     <p>
       Target: <a href={entry.data.target_link}>{entry.data.target_name}</a> ({
         entry.data.target_version
@@ -25,6 +26,25 @@ const s = entry.data.severity_summary;
     <p>
       Severity: C {s.critical} / H {s.high} / M {s.medium} / L {s.low}
     </p>
+    {
+      entry.data.links && (
+        <p>
+          Links:
+          {entry.data.links.repo && (
+            <>
+              {' '}
+              <a href={entry.data.links.repo}>Repository</a>
+            </>
+          )}
+          {entry.data.links.report_pdf && (
+            <>
+              {' '}
+              <a href={entry.data.links.report_pdf}>Report PDF</a>
+            </>
+          )}
+        </p>
+      )
+    }
     <Content />
   </article>
 </BaseLayout>

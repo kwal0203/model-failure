@@ -17,8 +17,37 @@ const { Content } = await entry.render();
 >
   <article>
     <h1>{entry.data.title}</h1>
+    <p class="meta">{entry.data.paper_authors.join(', ')}</p>
     <p class="meta">
       {entry.data.date} • {entry.data.venue} • Reproduced: {entry.data.reproduced ? 'yes' : 'no'}
+    </p>
+    <p class="meta">Topics: {entry.data.topics.join(', ')}</p>
+    <p>
+      Links:
+      {
+        entry.data.links.pdf && (
+          <>
+            {' '}
+            <a href={entry.data.links.pdf}>PDF</a>
+          </>
+        )
+      }
+      {
+        entry.data.links.arxiv && (
+          <>
+            {' '}
+            <a href={entry.data.links.arxiv}>arXiv</a>
+          </>
+        )
+      }
+      {
+        entry.data.links.doi && (
+          <>
+            {' '}
+            <a href={`https://doi.org/${entry.data.links.doi}`}>DOI</a>
+          </>
+        )
+      }
     </p>
     <Content />
   </article>
