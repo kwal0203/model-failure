@@ -8,6 +8,7 @@ Read this first. Follow it exactly unless a maintainer says otherwise.
 ## 0) Mission
 
 Build and maintain **modelfailure.com**: a fast, minimal, Markdown-first public site for AI security work:
+
 - Writings (failure notes)
 - Audits (structured security review reports)
 - Tools (red-teaming / evaluation tools)
@@ -58,6 +59,7 @@ Primary objective: **publish weekly with low friction** and high credibility (re
 All content types must be defined as Astro content collections with schema validation in `src/content/config.ts`.
 
 Collections:
+
 - `writings`
 - `audits`
 - `tools`
@@ -65,9 +67,10 @@ Collections:
 - `paper_reviews`
 
 Frontmatter must match schema. If schema needs to change, update:
-1) `src/content/config.ts`
-2) any templates/examples
-3) any listing pages that assume specific fields
+
+1. `src/content/config.ts`
+2. any templates/examples
+3. any listing pages that assume specific fields
 
 ---
 
@@ -110,6 +113,7 @@ Before opening a PR, ensure:
 - formatting/lint hooks pass (pre-commit)
 
 CI should run:
+
 - `npm ci`
 - `npm run build`
 - `npm run check` (if configured)
@@ -132,6 +136,7 @@ Use a short-lived feature branch for every change.
 4. Commit changes:
    - `git add -A`
    - `git commit -m "<type>: <summary>"`
+   - Example: `git commit -m "fix: resolve pre-commit formatting errors"`
 
    Types: `feat`, `fix`, `docs`, `chore`, `refactor`, `test`
    Examples:
@@ -142,11 +147,11 @@ Use a short-lived feature branch for every change.
 5. Push changes to GitHub:
    - `git push -u origin feature/<short-description>`
 
-6. Merge branch on GitHub:
-   - Open a PR.
-   - Prefer **squash merge** unless otherwise specified.
+6. Create a PR:
+   - `gh pr create --base main --head feature/<short-description> --fill`
 
-7. Delete branch on GitHub after merge.
+7. Merge the PR (prefer squash):
+   - `gh pr merge --squash --delete-branch`
 
 8. Checkout main:
    - `git checkout main`
@@ -155,8 +160,9 @@ Use a short-lived feature branch for every change.
    - `git pull origin main`
 
 10. Delete local feature branch:
-   - `git branch -d feature/<short-description>`
-   - If needed: `git branch -D feature/<short-description>`
+
+- `git branch -d feature/<short-description>`
+- If needed: `git branch -D feature/<short-description>`
 
 ---
 
@@ -165,6 +171,7 @@ Use a short-lived feature branch for every change.
 Hooks should be **fast** and operate on staged files.
 
 Recommended:
+
 - `prettier --write` on MD/MDX/JSON/YAML/CSS/etc.
 - `eslint --fix` on JS/TS/Astro (if ESLint is configured)
 
@@ -177,17 +184,18 @@ Run slow checks in CI (and optionally pre-push).
 
 When asked to make changes:
 
-1) Read `SPEC.md` (if present), `CONTENT_MODELS.md` (if present), and this file.
-2) Propose a plan:
+1. Read `SPEC.md` (if present), `CONTENT_MODELS.md` (if present), and this file.
+2. Propose a plan:
    - file tree changes
    - new/updated routes
    - schema changes
    - scripts/hooks changes
-3) Implement in small, logical commits.
-4) Ensure `npm run build` passes.
-5) Update README if developer workflow changes.
+3. Implement in small, logical commits.
+4. Ensure `npm run build` passes.
+5. Update README if developer workflow changes.
 
 Agents MUST:
+
 - Avoid introducing unnecessary dependencies.
 - Avoid inventing product requirements not stated in specs.
 - Prefer simple, explicit code over clever abstractions.
@@ -199,16 +207,18 @@ Agents MUST:
 This site focuses on **defensive, reproducible evaluation** and mitigations.
 Do not publish weaponized exploit chains or detailed instructions that enable wrongdoing.
 When in doubt, include:
+
 - minimal safe repro steps
 - mitigation guidance
 - responsible disclosure language
-and omit operational exploitation details.
+  and omit operational exploitation details.
 
 ---
 
 ## 11) Definition of done (for a PR)
 
 A PR is “done” when:
+
 - it satisfies the stated requirements/spec
 - it includes any needed templates/examples
 - it passes build + checks
