@@ -1,15 +1,22 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
+import PageLayout from "@/layouts/Base.astro";
 ---
 
-<BaseLayout
-  title="Responsible Disclosure | Model Failure"
-  description="Responsible disclosure policy."
+<PageLayout
+	meta={{
+		description: "Responsible disclosure policy for Model Failure research and audit publications.",
+		title: "Responsible Disclosure",
+	}}
 >
-  <h1>Responsible Disclosure</h1>
-  <p>
-    Do not publish weaponized exploits here. Coordinate responsibly with affected maintainers before
-    public release.
-  </p>
-  <p>When reporting issues, include reproducible steps, impact, and minimally sufficient proof.</p>
-</BaseLayout>
+	<h1 class="title mb-6">Responsible Disclosure</h1>
+	<div class="prose prose-sm max-w-none">
+		<p>
+			This site focuses on defensive security outcomes. I do not publish weaponized exploit chains or
+			step-by-step offensive deployment instructions.
+		</p>
+		<p>
+			When vulnerabilities involve live systems or third-party products, I coordinate disclosure with
+			relevant maintainers first and prioritize mitigation guidance in public writeups.
+		</p>
+	</div>
+</PageLayout>

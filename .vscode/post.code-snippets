@@ -1,0 +1,45 @@
+{
+	"Add frontmatter to a Model Failure Writing": {
+		"scope": "markdown,mdx",
+		"prefix": "frontmatter-writing",
+		"body": [
+			"---",
+			"title: \"\"",
+			"date: ${CURRENT_YEAR}-${CURRENT_MONTH}-${CURRENT_DATE}",
+			"description: \"\"",
+			"topics: [\"agent-security\"]",
+			"---",
+			"",
+			"## What failed",
+			"## Why it failed",
+			"## Minimal repro",
+			"## Fix / mitigation",
+			"## Notes"
+		],
+		"description": "Add frontmatter and sections for a writing"
+	},
+	"Add frontmatter to a Model Failure Audit": {
+		"scope": "markdown,mdx",
+		"prefix": "frontmatter-audit",
+		"body": [
+			"---",
+			"title: \"\"",
+			"date: ${CURRENT_YEAR}-${CURRENT_MONTH}-${CURRENT_DATE}",
+			"target_name: \"\"",
+			"target_link: \"https://example.com\"",
+			"target_version: \"\"",
+			"scope: \"\"",
+			"severity_summary: { critical: 0, high: 0, medium: 0, low: 0 }",
+			"topics: [\"rag-security\"]",
+			"links: { repo: \"\" }",
+			"---",
+			"",
+			"## Threat model",
+			"## Attack surface",
+			"## Findings",
+			"## Recommendations",
+			"## Appendix"
+		],
+		"description": "Add frontmatter and sections for an audit"
+	}
+}

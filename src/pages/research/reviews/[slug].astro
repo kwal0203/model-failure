@@ -1,56 +1,62 @@
 ---
-import BaseLayout from '../../../layouts/BaseLayout.astro';
-import { getCollection } from 'astro:content';
+import { render } from "astro:content";
+import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
+import FormattedDate from "@/components/FormattedDate.astro";
+import { getPaperReviews } from "@/data/modelfailure";
+import PageLayout from "@/layouts/Base.astro";
 
-export async function getStaticPaths() {
-  const entries = await getCollection('paper_reviews');
-  return entries.map((entry) => ({ params: { slug: entry.slug }, props: { entry } }));
-}
+export const getStaticPaths = (async () => {
+	const entries = await getPaperReviews();
+	return entries.map((entry) => ({
+		params: { slug: entry.id },
+		props: { entry },
+	}));
+}) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
 const { entry } = Astro.props;
-const { Content } = await entry.render();
+const { Content } = await render(entry);
+const links = Object.entries(entry.data.links).filter(
+	(link): link is [string, string] => typeof link[1] === "string" && link[1].length > 0,
+);
 ---
 
-<BaseLayout
-  title={`${entry.data.title} | Paper Reviews`}
-  description={`${entry.data.venue} (${entry.data.year})`}
+<PageLayout
+	meta={{
+		articleDate: entry.data.date.toISOString(),
+		description: `${entry.data.venue} (${entry.data.year})`,
+		title: entry.data.title,
+	}}
 >
-  <article class="prose">
-    <h1>{entry.data.title}</h1>
-    <p class="meta">{entry.data.paper_authors.join(', ')}</p>
-    <p class="meta">
-      {entry.data.date} • {entry.data.venue} • Reproduced: {entry.data.reproduced ? 'yes' : 'no'}
-    </p>
-    <div class="tag-row">
-      {entry.data.topics.map((topic) => <span class="tag">{topic}</span>)}
-    </div>
-    <p>
-      Links:
-      {
-        entry.data.links.pdf && (
-          <>
-            {' '}
-            <a href={entry.data.links.pdf}>PDF</a>
-          </>
-        )
-      }
-      {
-        entry.data.links.arxiv && (
-          <>
-            {' '}
-            <a href={entry.data.links.arxiv}>arXiv</a>
-          </>
-        )
-      }
-      {
-        entry.data.links.doi && (
-          <>
-            {' '}
-            <a href={`https://doi.org/${entry.data.links.doi}`}>DOI</a>
-          </>
-        )
-      }
-    </p>
-    <Content />
-  </article>
-</BaseLayout>
+	<article class="prose prose-sm max-w-none">
+		<h1 class="title mb-3">{entry.data.title}</h1>
+		<p class="not-prose mb-1 text-sm text-gray-600 dark:text-gray-400">
+			<FormattedDate date={entry.data.date} />
+		</p>
+		<p class="not-prose mb-1 text-sm">{entry.data.paper_authors.join(", ")}</p>
+		<p class="not-prose mb-1 text-sm">
+			{entry.data.venue} ({entry.data.year})
+		</p>
+		<p class="not-prose mb-6 text-sm">Reproduced: {entry.data.reproduced ? "Yes" : "No"}</p>
+		{entry.data.topics.length > 0 && (
+			<ul class="not-prose mb-6 flex flex-wrap gap-2" role="list">
+				{entry.data.topics.map((topic) => (
+					<li class="cactus-link text-sm">#{topic}</li>
+				))}
+			</ul>
+		)}
+		{links.length > 0 && (
+			<ul class="not-prose mb-8 flex flex-wrap gap-3 text-sm" role="list">
+				{links.map(([key, value]) => (
+					<li>
+						<a class="cactus-link" href={value}>
+							{key}
+						</a>
+					</li>
+				))}
+			</ul>
+		)}
+		<Content />
+	</article>
+</PageLayout>

@@ -1,52 +1,71 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getCollection } from 'astro:content';
+import { render } from "astro:content";
+import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
+import FormattedDate from "@/components/FormattedDate.astro";
+import { getAudits } from "@/data/modelfailure";
+import PageLayout from "@/layouts/Base.astro";
 
-export async function getStaticPaths() {
-  const entries = await getCollection('audits');
-  return entries.map((entry) => ({ params: { slug: entry.slug }, props: { entry } }));
-}
+export const getStaticPaths = (async () => {
+	const entries = await getAudits();
+	return entries.map((entry) => ({
+		params: { slug: entry.id },
+		props: { entry },
+	}));
+}) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
 const { entry } = Astro.props;
-const { Content } = await entry.render();
-const s = entry.data.severity_summary;
+const { Content } = await render(entry);
 ---
 
-<BaseLayout title={`${entry.data.title} | Audits`} description={entry.data.scope}>
-  <article class="prose">
-    <h1>{entry.data.title}</h1>
-    <p class="meta">{entry.data.date} • {entry.data.target_name}</p>
-    <div class="tag-row">
-      {entry.data.topics.map((topic) => <span class="tag">{topic}</span>)}
-    </div>
-    <p>
-      Target: <a href={entry.data.target_link}>{entry.data.target_name}</a> ({
-        entry.data.target_version
-      })
-    </p>
-    <p>Scope: {entry.data.scope}</p>
-    <p>
-      Severity: C {s.critical} / H {s.high} / M {s.medium} / L {s.low}
-    </p>
-    {
-      entry.data.links && (
-        <p>
-          Links:
-          {entry.data.links.repo && (
-            <>
-              {' '}
-              <a href={entry.data.links.repo}>Repository</a>
-            </>
-          )}
-          {entry.data.links.report_pdf && (
-            <>
-              {' '}
-              <a href={entry.data.links.report_pdf}>Report PDF</a>
-            </>
-          )}
-        </p>
-      )
-    }
-    <Content />
-  </article>
-</BaseLayout>
+<PageLayout
+	meta={{
+		articleDate: entry.data.date.toISOString(),
+		description: `Audit of ${entry.data.target_name}: ${entry.data.scope}`,
+		title: entry.data.title,
+	}}
+>
+	<article class="prose prose-sm max-w-none">
+		<h1 class="title mb-3">{entry.data.title}</h1>
+		<p class="not-prose mb-1 text-sm text-gray-600 dark:text-gray-400">
+			<FormattedDate date={entry.data.date} />
+		</p>
+		<p class="not-prose mb-1 text-sm">
+			Target: <a class="cactus-link" href={entry.data.target_link}>{entry.data.target_name}</a>
+		</p>
+		<p class="not-prose mb-1 text-sm">Version: {entry.data.target_version}</p>
+		<p class="not-prose mb-4 text-sm">Scope: {entry.data.scope}</p>
+		<p class="not-prose mb-6 text-sm">
+			Severity summary: Critical {entry.data.severity_summary.critical}, High{" "}
+			{entry.data.severity_summary.high}, Medium {entry.data.severity_summary.medium}, Low{" "}
+			{entry.data.severity_summary.low}
+		</p>
+		{(entry.data.links.repo || entry.data.links.report_pdf) && (
+			<ul class="not-prose mb-8 flex flex-wrap gap-3 text-sm" role="list">
+				{entry.data.links.repo && (
+					<li>
+						<a class="cactus-link" href={entry.data.links.repo}>
+							Repository
+						</a>
+					</li>
+				)}
+				{entry.data.links.report_pdf && (
+					<li>
+						<a class="cactus-link" href={entry.data.links.report_pdf}>
+							Report PDF
+						</a>
+					</li>
+				)}
+			</ul>
+		)}
+		{entry.data.topics.length > 0 && (
+			<ul class="not-prose mb-8 flex flex-wrap gap-2" role="list">
+				{entry.data.topics.map((topic) => (
+					<li class="cactus-link text-sm">#{topic}</li>
+				))}
+			</ul>
+		)}
+		<Content />
+	</article>
+</PageLayout>

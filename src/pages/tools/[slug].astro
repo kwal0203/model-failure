@@ -1,26 +1,52 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getCollection } from 'astro:content';
+import { render } from "astro:content";
+import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
+import FormattedDate from "@/components/FormattedDate.astro";
+import { getTools } from "@/data/modelfailure";
+import PageLayout from "@/layouts/Base.astro";
 
-export async function getStaticPaths() {
-  const entries = await getCollection('tools');
-  return entries.map((entry) => ({ params: { slug: entry.slug }, props: { entry } }));
-}
+export const getStaticPaths = (async () => {
+	const entries = await getTools();
+	return entries.map((entry) => ({
+		params: { slug: entry.id },
+		props: { entry },
+	}));
+}) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
 const { entry } = Astro.props;
-const { Content } = await entry.render();
+const { Content } = await render(entry);
 ---
 
-<BaseLayout title={`${entry.data.title} | Tools`} description={entry.data.description}>
-  <article class="prose">
-    <h1>{entry.data.title}</h1>
-    <p class="meta">{entry.data.date} • {entry.data.status}</p>
-    <div class="tag-row">
-      {entry.data.topics.map((topic) => <span class="tag">{topic}</span>)}
-    </div>
-    <p>
-      Repo: <a href={entry.data.repo}>{entry.data.repo}</a>
-    </p>
-    <Content />
-  </article>
-</BaseLayout>
+<PageLayout
+	meta={{
+		articleDate: entry.data.date.toISOString(),
+		description: entry.data.description,
+		title: entry.data.title,
+	}}
+>
+	<article class="prose prose-sm max-w-none">
+		<h1 class="title mb-3">{entry.data.title}</h1>
+		<p class="not-prose mb-1 text-sm text-gray-600 dark:text-gray-400">
+			<FormattedDate date={entry.data.date} />
+		</p>
+		<p class="not-prose mb-1 text-sm">
+			Status: <strong>{entry.data.status}</strong>
+		</p>
+		<p class="not-prose mb-6 text-sm">
+			Repository:{" "}
+			<a class="cactus-link" href={entry.data.repo}>
+				{entry.data.repo}
+			</a>
+		</p>
+		{entry.data.topics.length > 0 && (
+			<ul class="not-prose mb-8 flex flex-wrap gap-2" role="list">
+				{entry.data.topics.map((topic) => (
+					<li class="cactus-link text-sm">#{topic}</li>
+				))}
+			</ul>
+		)}
+		<Content />
+	</article>
+</PageLayout>

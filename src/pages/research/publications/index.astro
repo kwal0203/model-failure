@@ -1,22 +1,31 @@
 ---
-import BaseLayout from '../../../layouts/BaseLayout.astro';
-import { getPublications } from '../../../lib/content';
+import { getPublications, sortPublications } from "@/data/modelfailure";
+import PageLayout from "@/layouts/Base.astro";
 
-const publications = await getPublications();
+const publications = sortPublications(await getPublications());
 ---
 
-<BaseLayout title="Publications | Model Failure" description="My research publications.">
-  <h1>Publications</h1>
-  <ul class="list">
-    {
-      publications.map((entry) => (
-        <li class="item">
-          <a href={`/research/publications/${entry.slug}/`}>{entry.data.title}</a>
-          <div class="meta">
-            {entry.data.year} • {entry.data.venue} • {entry.data.type}
-          </div>
-        </li>
-      ))
-    }
-  </ul>
-</BaseLayout>
+<PageLayout
+	meta={{
+		description: "My publications in AI security and adjacent systems robustness topics.",
+		title: "Research Publications",
+	}}
+>
+	<h1 class="title mb-8">Research Publications</h1>
+	<ul class="space-y-6" role="list">
+		{publications.map((entry) => (
+			<li class="rounded border border-gray-300 p-4 dark:border-gray-700">
+				<div class="mb-1 flex items-center justify-between gap-2">
+					<a class="cactus-link font-semibold" href={`/research/publications/${entry.id}/`}>
+						{entry.data.title}
+					</a>
+					<span class="text-sm text-gray-600 dark:text-gray-400">{entry.data.year}</span>
+				</div>
+				<p class="mb-1 text-sm">{entry.data.authors.join(", ")}</p>
+				<p class="text-sm">
+					{entry.data.venue} ({entry.data.type})
+				</p>
+			</li>
+		))}
+	</ul>
+</PageLayout>

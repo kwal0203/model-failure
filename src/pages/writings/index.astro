@@ -1,26 +1,36 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getWritings } from '../../lib/content';
+import { Icon } from "astro-icon/components";
+import FormattedDate from "@/components/FormattedDate.astro";
+import { getWritings, sortByDateDesc } from "@/data/modelfailure";
+import PageLayout from "@/layouts/Base.astro";
 
-const writings = await getWritings();
+const writings = sortByDateDesc(await getWritings());
 ---
 
-<BaseLayout
-  title="Writings | Model Failure"
-  description="Short posts, failure notes, and lessons learned."
+<PageLayout
+	meta={{
+		description: "Short failure notes, checklists, and lessons learned from defensive AI security work.",
+		title: "Writings",
+	}}
 >
-  <h1>Writings</h1>
-  <ul class="list">
-    {
-      writings.map((entry) => (
-        <li class="item">
-          <a href={`/writings/${entry.slug}/`}>{entry.data.title}</a>
-          <div class="meta">
-            {entry.data.date} • {entry.data.topics.join(', ')}
-          </div>
-          <p>{entry.data.description}</p>
-        </li>
-      ))
-    }
-  </ul>
-</BaseLayout>
+	<div class="mb-10 flex items-center gap-3">
+		<h1 class="title">Writings</h1>
+		<a class="text-accent" href="/rss.xml" target="_blank">
+			<span class="sr-only">RSS feed</span>
+			<Icon aria-hidden="true" class="h-6 w-6" focusable="false" name="mdi:rss" />
+		</a>
+	</div>
+	<ul class="space-y-5" role="list">
+		{writings.map((entry) => (
+			<li class="grid gap-1 sm:grid-cols-[auto_1fr]">
+				<FormattedDate class="min-w-30 font-semibold text-gray-600 dark:text-gray-400" date={entry.data.date} />
+				<div>
+					<a class="cactus-link font-semibold" href={`/writings/${entry.id}/`}>
+						{entry.data.title}
+					</a>
+					<p class="mt-1 text-sm">{entry.data.description}</p>
+				</div>
+			</li>
+		))}
+	</ul>
+</PageLayout>

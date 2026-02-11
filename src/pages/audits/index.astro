@@ -1,22 +1,43 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getAudits } from '../../lib/content';
+import { Icon } from "astro-icon/components";
+import FormattedDate from "@/components/FormattedDate.astro";
+import { getAudits, sortByDateDesc } from "@/data/modelfailure";
+import PageLayout from "@/layouts/Base.astro";
 
-const audits = await getAudits();
+const audits = sortByDateDesc(await getAudits());
 ---
 
-<BaseLayout title="Audits | Model Failure" description="Structured AI security audit reports.">
-  <h1>Audits</h1>
-  <ul class="list">
-    {
-      audits.map((entry) => (
-        <li class="item">
-          <a href={`/audits/${entry.slug}/`}>{entry.data.title}</a>
-          <div class="meta">
-            {entry.data.date} • {entry.data.target_name} ({entry.data.target_version})
-          </div>
-        </li>
-      ))
-    }
-  </ul>
-</BaseLayout>
+<PageLayout
+	meta={{
+		description: "Structured AI security audit reports with reproducible findings and mitigations.",
+		title: "Audits",
+	}}
+>
+	<div class="mb-10 flex items-center gap-3">
+		<h1 class="title">Audits</h1>
+		<a class="text-accent" href="/rss.xml" target="_blank">
+			<span class="sr-only">RSS feed</span>
+			<Icon aria-hidden="true" class="h-6 w-6" focusable="false" name="mdi:rss" />
+		</a>
+	</div>
+	<ul class="space-y-6" role="list">
+		{audits.map((entry) => (
+			<li class="rounded border border-gray-300 p-4 dark:border-gray-700">
+				<div class="mb-2 flex items-center justify-between gap-2">
+					<a class="cactus-link font-semibold" href={`/audits/${entry.id}/`}>
+						{entry.data.title}
+					</a>
+					<FormattedDate class="text-sm text-gray-600 dark:text-gray-400" date={entry.data.date} />
+				</div>
+				<p class="mb-2 text-sm">
+					Target: <a class="cactus-link" href={entry.data.target_link}>{entry.data.target_name}</a> (
+					{entry.data.target_version})
+				</p>
+				<p class="text-sm">
+					Severity: C{entry.data.severity_summary.critical} / H{entry.data.severity_summary.high} / M
+					{entry.data.severity_summary.medium} / L{entry.data.severity_summary.low}
+				</p>
+			</li>
+		))}
+	</ul>
+</PageLayout>

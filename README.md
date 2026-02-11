@@ -1,52 +1,87 @@
-# modelfailure.com
+# Model Failure
 
-Static Astro site for AI security writings, audits, tools, and research.
+Model Failure is a static Astro site for defensive AI security publishing.
+
+## Focus
+
+- Writings: short failure notes and checklists
+- Audits: structured security review reports
+- Tools: red-team and evaluation tooling pages
+- Research: publications and paper reviews
+
+## Stack
+
+- Astro (static output)
+- Markdown/MDX content collections with Zod validation
+- Tailwind CSS
+- RSS + sitemap
+- Cloudflare Pages target deployment
+
+## Required Routes
+
+- `/writings`
+- `/audits`
+- `/tools`
+- `/research`
+- `/research/publications`
+- `/research/reviews`
+- `/about`
+- `/disclosure`
+- `/scope`
+
+## Content Collections
+
+Defined in `src/content/config.ts`:
+
+- `writings`
+- `audits`
+- `tools`
+- `publications`
+- `paper_reviews`
+
+Content lives under `src/content/<collection>/`.
 
 ## Local Development
 
-Prerequisites:
+```bash
+# use Node 20 with nvm
+source "$HOME/.nvm/nvm.sh"
+nvm use 20
 
-- Node.js `>=18.20.8` (Node 20 recommended)
-- npm
+npm install
+npm run dev
+```
 
-Commands:
+## Checks
 
-- `npm install`
-- `npm run dev`
-- `npm run build`
-- `npm run check`
+```bash
+npm run check
+npm run build
+```
 
-## Deploy to Cloudflare Pages
+## Git Workflow
 
-1. In Cloudflare Dashboard, go to `Workers & Pages` -> `Create` -> `Pages` -> `Connect to Git`.
-2. Select repo: `kwal0203/model-failure`.
-3. Configure build:
-   - Framework preset: `Astro`
-   - Build command: `npm run build`
-   - Build output directory: `dist`
-4. Add environment variable:
-   - `NODE_VERSION=20`
-5. Set production branch to `main`.
-6. Deploy.
+Follow `AGENTS.md`:
 
-## Custom Domain
+1. Create feature branch: `git checkout -b feature/<short-description>`
+2. Make changes
+3. Commit with conventional type prefix (`feat`, `fix`, `docs`, `chore`, `refactor`, `test`)
+4. Merge back into `main`
 
-This project is configured with:
+## Pre-commit Hook
 
-- `site: https://modelfailure.com` in `astro.config.mjs`
+Repository hooks are configured under `.githooks/`.
 
-If you want to serve from `www.modelfailure.com` as canonical:
+- Prettier runs on staged markdown/json/yaml/css/html files
+- Biome runs on staged js/ts/astro/json files
 
-1. In Cloudflare Pages project, open `Custom domains`.
-2. Add `www.modelfailure.com`.
-3. In DNS, create/update:
-   - `CNAME` record for `www` pointing to your Cloudflare Pages hostname (shown in the Pages UI).
-4. Decide canonical host:
-   - Option A: canonical `www.modelfailure.com` and redirect apex `modelfailure.com` -> `www.modelfailure.com`
-   - Option B: canonical apex `modelfailure.com` and redirect `www` -> apex
-5. Keep `astro.config.mjs` `site` URL aligned to the canonical host for correct canonical tags, RSS, and sitemap URLs.
+Enable locally (already configured in this repo):
+
+```bash
+git config core.hooksPath .githooks
+```
 
 ## Notes
 
-- Pre-commit runs `lint-staged` via Husky.
-- The site is static only (no backend, auth, or database).
+- The site is static-only: no backend, auth, or database.
+- Keep content defensive and reproducible; avoid weaponized exploit detail.

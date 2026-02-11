@@ -1,35 +1,81 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import { getLatestMixed } from '../lib/content';
+import FormattedDate from "@/components/FormattedDate.astro";
+import { getLatestFeedItems } from "@/data/modelfailure";
+import PageLayout from "@/layouts/Base.astro";
 
-const latest = await getLatestMixed(6);
+const latestItems = await getLatestFeedItems(6);
+
+const sectionLabel: Record<string, string> = {
+	audits: "Audit",
+	paper_reviews: "Review",
+	tools: "Tool",
+	writings: "Writing",
+};
 ---
 
-<BaseLayout
-  title="Model Failure | AI Security"
-  description="Fast, Markdown-first site for AI security writings, audits, tools, and research."
+<PageLayout
+	meta={{
+		description:
+			"Model Failure publishes defensive AI security writings, structured audits, practical tools, and research reviews.",
+		title: "Home",
+	}}
 >
-  <h1>Model Failure</h1>
-  <p>
-    AI security notes, audits, tools, and paper analysis focused on practical, defensive outcomes.
-  </p>
-  <p>
-    Explore: <a href="/writings/">Writings</a> · <a href="/audits/">Audits</a> · <a href="/tools/"
-      >Tools</a
-    > · <a href="/research/">Research</a> · <a href="/about/">About</a>
-  </p>
+	<section class="mb-16">
+		<h1 class="title mb-4">Model Failure</h1>
+		<p class="mb-4">
+			A fast, markdown-first publication focused on defensive AI security engineering.
+		</p>
+		<p>
+			I publish reproducible failure notes, structured audits, practical red-team tooling, and research
+			reviews.
+		</p>
+	</section>
 
-  <h2>Latest</h2>
-  <ul class="list">
-    {
-      latest.map((item) => (
-        <li class="item">
-          <a href={item.href}>{item.title}</a>
-          <div class="meta">
-            {item.kind} • {item.date}
-          </div>
-        </li>
-      ))
-    }
-  </ul>
-</BaseLayout>
+	<section class="mb-16">
+		<h2 class="title mb-6 text-xl">Latest</h2>
+		<ul class="space-y-5" role="list">
+			{
+				latestItems.map((item) => (
+					<li class="grid gap-1 sm:grid-cols-[auto_1fr]">
+						<FormattedDate class="min-w-30 font-semibold text-gray-600 dark:text-gray-400" date={item.date} />
+						<div>
+							<p class="mb-1 text-xs uppercase tracking-wide text-gray-600 dark:text-gray-400">
+								{sectionLabel[item.collection]}
+							</p>
+							<a class="cactus-link font-semibold" href={item.link}>
+								{item.title}
+							</a>
+							<p class="mt-1 text-sm">{item.description}</p>
+						</div>
+					</li>
+				))
+			}
+		</ul>
+	</section>
+
+	<section>
+		<h2 class="title mb-6 text-xl">Sections</h2>
+		<ul class="grid gap-3 sm:grid-cols-2" role="list">
+			<li>
+				<a class="cactus-link font-semibold" href="/writings/">
+					Writings
+				</a>
+			</li>
+			<li>
+				<a class="cactus-link font-semibold" href="/audits/">
+					Audits
+				</a>
+			</li>
+			<li>
+				<a class="cactus-link font-semibold" href="/tools/">
+					Tools
+				</a>
+			</li>
+			<li>
+				<a class="cactus-link font-semibold" href="/research/">
+					Research
+				</a>
+			</li>
+		</ul>
+	</section>
+</PageLayout>
