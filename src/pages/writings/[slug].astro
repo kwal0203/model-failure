@@ -12,9 +12,12 @@ const { Content } = await entry.render();
 ---
 
 <BaseLayout title={`${entry.data.title} | Writings`} description={entry.data.description}>
-  <article>
+  <article class="prose">
     <h1>{entry.data.title}</h1>
-    <p class="meta">{entry.data.date} • {entry.data.topics.join(', ')}</p>
+    <p class="meta">{entry.data.date}</p>
+    <div class="tag-row">
+      {entry.data.topics.map((topic) => <span class="tag">{topic}</span>)}
+    </div>
     <Content />
   </article>
 </BaseLayout>
