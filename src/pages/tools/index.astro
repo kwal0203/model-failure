@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getTools } from '../../lib/content';
+
+const tools = await getTools();
+---
+
+<BaseLayout title="Tools | Model Failure" description="Red-teaming and evaluation tools.">
+  <h1>Tools</h1>
+  <ul class="list">
+    {
+      tools.map((entry) => (
+        <li class="item">
+          <a href={`/tools/${entry.slug}/`}>{entry.data.title}</a>
+          <div class="meta">
+            {entry.data.date} • {entry.data.status}
+          </div>
+          <p>{entry.data.description}</p>
+        </li>
+      ))
+    }
+  </ul>
+</BaseLayout>

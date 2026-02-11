@@ -1,0 +1,66 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'AI security writings, audits, tools, and research.' } = Astro.props;
+const path = Astro.url.pathname;
+
+const nav = [
+  { href: '/writings/', label: 'Writings' },
+  { href: '/audits/', label: 'Audits' },
+  { href: '/tools/', label: 'Tools' },
+  { href: '/research/', label: 'Research' },
+  { href: '/about/', label: 'About' },
+  { href: '/disclosure/', label: 'Disclosure' },
+  { href: '/scope/', label: 'Scope' },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={new URL(path, Astro.site).toString()} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={new URL(path, Astro.site).toString()} />
+    <meta name="twitter:card" content="summary" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="/">Model Failure</a>
+        <nav aria-label="Primary">
+          <ul class="nav-list">
+            {
+              nav.map((item) => (
+                <li>
+                  <a href={item.href} class:list={{ active: path.startsWith(item.href) }}>
+                    {item.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <main class="container">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <p>Model Failure</p>
+        <a href="/feed.xml">RSS</a>
+      </div>
+    </footer>
+  </body>
+</html>

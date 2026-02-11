@@ -1,0 +1,68 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('publications');
+  return entries.map((entry) => ({ params: { slug: entry.slug }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+---
+
+<BaseLayout
+  title={`${entry.data.title} | Publications`}
+  description={`${entry.data.venue} (${entry.data.year})`}
+>
+  <article>
+    <h1>{entry.data.title}</h1>
+    <p class="meta">{entry.data.authors.join(', ')}</p>
+    <p class="meta">{entry.data.year} • {entry.data.venue} • {entry.data.type}</p>
+    <p class="meta">Topics: {entry.data.topics.join(', ')}</p>
+    <p>
+      Links:
+      {
+        entry.data.links.pdf && (
+          <>
+            {' '}
+            <a href={entry.data.links.pdf}>PDF</a>
+          </>
+        )
+      }
+      {
+        entry.data.links.arxiv && (
+          <>
+            {' '}
+            <a href={entry.data.links.arxiv}>arXiv</a>
+          </>
+        )
+      }
+      {
+        entry.data.links.doi && (
+          <>
+            {' '}
+            <a href={`https://doi.org/${entry.data.links.doi}`}>DOI</a>
+          </>
+        )
+      }
+      {
+        entry.data.links.code && (
+          <>
+            {' '}
+            <a href={entry.data.links.code}>Code</a>
+          </>
+        )
+      }
+      {
+        entry.data.links.slides && (
+          <>
+            {' '}
+            <a href={entry.data.links.slides}>Slides</a>
+          </>
+        )
+      }
+    </p>
+    <Content />
+  </article>
+</BaseLayout>

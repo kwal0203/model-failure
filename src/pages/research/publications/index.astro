@@ -1,0 +1,22 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { getPublications } from '../../../lib/content';
+
+const publications = await getPublications();
+---
+
+<BaseLayout title="Publications | Model Failure" description="My research publications.">
+  <h1>Publications</h1>
+  <ul class="list">
+    {
+      publications.map((entry) => (
+        <li class="item">
+          <a href={`/research/publications/${entry.slug}/`}>{entry.data.title}</a>
+          <div class="meta">
+            {entry.data.year} • {entry.data.venue} • {entry.data.type}
+          </div>
+        </li>
+      ))
+    }
+  </ul>
+</BaseLayout>
