@@ -92,7 +92,6 @@ export default defineConfig({
 		},
 		// Duplicate Vite type packages can make @tailwindcss/vite appear incompatible at type-check time.
 		// Runtime behavior is unaffected.
-		// @ts-expect-error - plugin type mismatch between vite package instances
 		plugins: [tailwind(), rawFonts([".ttf", ".woff"])],
 	},
 	env: {
